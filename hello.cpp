@@ -41,9 +41,10 @@ double primary () {
     switch (t.kind) {
         case '(':
             {
-                // unfinished
+                double d = expression(); // "(" exp ")"
                 t = get_token();
                 if (t.kind != ')') error("')' expected");
+                return d;
             }
         case '8':
             return t.value;
@@ -64,7 +65,7 @@ double term () {
                 {
                     left *= primary();
                     t = get_token();
-                    if (t.kind == ';' || t.kind == '-' || t.kind == '+') cin.putback(t.kind);
+                    if (t.kind == ';' || t.kind == '-' || t.kind == '+' || t.kind == ')') cin.putback(t.kind);
                     if (t.kind != '*' && t.kind != '/') return left;
                     break;
                 }
@@ -95,25 +96,34 @@ double expression () {
 
     /* cout << "exp: " << t.kind << ", " << t.value << endl; */
     
-    bool run = true;
-    while (run) {
+    while (true) {
         switch (t.kind) {
             case '+':
                 left += term();
                 t = get_token();
                 if (t.kind == ';') return left;
+                else if (t.kind == ')') {
+                    cin.putback(t.kind);
+                    return left;
+                }
                 break;
             case '-':
                 left -= term();
                 t = get_token();
                 if (t.kind == ';') return left;
+                else if (t.kind == ')') {
+                    cin.putback(t.kind);
+                    return left;
+                }
                 break;
-            case ';':
+            case ')':
+                cin.putback(t.kind);
                 return left;
             case '8':
                 cin.putback(t.value);
                 return left;
-                break;
+            case ';':
+                return left;
             default:
                 error("unknown token kind value in expression");
         }
