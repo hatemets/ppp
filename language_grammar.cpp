@@ -2,9 +2,7 @@
 
 bool is_correct (string word, vector <string> list) {
     for (string w : list)
-    {
         if (word == w) return true;
-    }
     return false;
 }
 
@@ -55,9 +53,14 @@ bool sentence (vector <string> words) {
     }
     else if (words.size() > 4)
     {
+        int counter = 0;
         for (int i = words.size() - 5; i > 2; i -= 4) {
             if (!is_correct(words[i], conjunctions)) return false;
-            else if (i != 3 && words[i] != "and") return false;
+
+            if (words[i] == "but") {
+                ++counter;
+                if (counter > 1) return false;
+            }
         }
 
         for (int j = 0; j < words.size() / 4; ++j) {
