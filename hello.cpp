@@ -1,45 +1,36 @@
 #include "std_lib_facilities.h"
 
-double factorial (int n) {
-    if (n == 0) return 1;
-    else if (n < 0) error("negative number for factorial");
-    double total = 1;
+class Name_pairs {
+    private:
+        vector<string> name;
+        /* vector<double> age; */
+    public:
+        Name_pairs();
+        void read_names(istream&);
+        void print_names(ostream&);
+};
 
-    for (n; n > 1; --n)
-        total *= n;
+Name_pairs::Name_pairs () { }
 
-    return total;
+void Name_pairs::read_names(istream& is) {
+    while (true) {
+        string n;
+        is >> n;
+        if (n == "q") return;
+        name.push_back(n);
+    }
 }
 
-int perm (int a, int b) {
-    return factorial(a) / (factorial(a - b));
-}
-
-int comb (int a, int b) {
-    return perm(a, b) / factorial(b);
+void Name_pairs::print_names(ostream& os) {
+    for (int i = 0; i < name.size(); i++) {
+        os << name[i] << endl;
+    }
 }
 
 int main () {
-    try {
-        int a, b = 0;
-        char type;
-        cout << "enter two integeres: ";
-        cin >> a >> b;
-        cout << "permutation (p) or combination (c)? ";
-        cin >> type;
-
-        if (type == 'p')
-            cout << perm(a, b) << endl;
-        else if (type == 'c')
-            cout << comb(a, b) << endl;
-        else
-            error("unknown type");
-
-
-        return 0;
-    } catch (exception& e) {
-        cerr << "error: " << e.what() << endl;
-    } catch (...) {
-        cerr << "unknown exception" << endl;
-    }
+    Name_pairs a;
+    a.read_names(cin);
+    a.print_names(cout);
+    return 0;
 }
+
